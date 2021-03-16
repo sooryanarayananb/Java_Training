@@ -16,6 +16,12 @@ class Outer{
 		}
 	}
 
+	class NonStaticInner{
+		public void nonStaticInnerMethod(){
+			System.out.println("This is a non-static inner class.");
+		}
+	}
+
 }
 
 
@@ -25,6 +31,12 @@ public class StaticClassExample{
 
 		Outer.Inner instance = new Outer.Inner();
 		instance.innerMethod();
+
+
+		// Accessing non-static Inner class.
+		Outer.NonStaticInner nonStaticInstance = new Outer().new NonStaticInner(); 
+		nonStaticInstance.nonStaticInnerMethod();
+
 	}
 
 }

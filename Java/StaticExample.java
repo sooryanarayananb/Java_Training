@@ -33,5 +33,6 @@ public class StaticExample {
   }
 }
 
-//By making ceo static, it would stored in the heap area and would be shared with all the objects. 
-//To access static variables you don't need an object. You can use the classname itself. 
+// By making ceo static, it would stored in the heap area and would be shared with all the objects. 
+// To access static variables you don't need an object. You can use the classname itself. 
+// The reason why there is static in main function is to access the main function without an object. 

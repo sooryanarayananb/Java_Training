@@ -14,6 +14,11 @@
 // The variable a is operated on as an array. In this case, we have defined the 
 // data type of a as int. So it can take only integer values.
 
+//Important:
+// There can be only one variable argument in a method.
+// Variable argument (varargs) must be the last argument.
+
+
 
 public class VariableArgumentsExample{
 

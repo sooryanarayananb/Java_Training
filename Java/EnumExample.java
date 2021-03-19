@@ -4,11 +4,13 @@
 // enum can be inside or outside a class. 
 // enum can also have attributes, methods as same as classes. 
 
-// enum is converted into:
+// enum is converted by compiler tos:
 // class Mobile {
 //   static final Mobile APPLE = new Mobile();  
 // }
 
+
+//Grouping 
 
 enum Mobile {
 

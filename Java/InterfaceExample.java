@@ -46,7 +46,7 @@ class Bicycle implements Vehicle{
 
 class InterfaceExample{
 
-	public static void main(String args[]){
+	public static void main(String[] arg){
 
 		Bicycle instance = new Bicycle();
 

@@ -9,6 +9,11 @@ enum BankLocation{
 	PUNE
 }
 
+abstract class BankTransactions {
+	
+	protected abstract void addTransaction(String message);
+
+}
 
 interface SavingsAccount
 {
@@ -17,7 +22,7 @@ interface SavingsAccount
 }
 
 
-class Customer implements SavingsAccount
+class Customer extends BankTransactions implements SavingsAccount
 {
 	String username, password, name, address, phone;
 	double balance;
@@ -57,7 +62,7 @@ class Customer implements SavingsAccount
 		addTransaction( amount +" debited from your account. Balance - " + balance);
 	}
 
-	private void addTransaction(String message)
+	protected void addTransaction(String message)
 	{
 			transactions.add(0, message);
 			if(transactions.size() > 5)
@@ -78,6 +83,7 @@ class Customer implements SavingsAccount
 			System.out.print("\nEnter your choice : ");
 
 	}
+
 }
 
 
@@ -101,6 +107,7 @@ class Bank
 		String username,password;double amount;
 		Bank bank  =  new Bank();
 		int choice;
+
 	outer:	while(true)
 		{
 
@@ -152,12 +159,9 @@ class Bank
 						bf = new BufferedWriter(new FileWriter(file));
 
 						for(Map.Entry<String, Customer> entry:  bank.customerMap.entrySet()){
-
 							bf.write(entry.getKey() + " : " + entry.getValue());
 							bf.newLine();
-
 						}
-
 						bf.flush();
 
 					} catch(IOException e){

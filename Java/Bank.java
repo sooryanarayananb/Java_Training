@@ -1,5 +1,13 @@
 import java.util.*;
 import java.text.*;
+import java.io.*;
+
+enum BankLocation{
+	
+	CHENNAI,
+	KOCHI,
+	PUNE
+}
 
 
 interface SavingsAccount
@@ -11,11 +19,12 @@ interface SavingsAccount
 
 class Customer implements SavingsAccount
 {
-	String username,password,name,address,phone;
+	String username, password, name, address, phone;
 	double balance;
+	BankLocation homeBranch;
 	ArrayList<String> transactions;
 	
-	Customer(String username,String password,String name,String address,String phone,double balance)
+	Customer(String username, String password, String name, String address, String phone, double balance, BankLocation homeBranch)
 	{
 		this.username = username;
 		this.password = password;
@@ -23,6 +32,8 @@ class Customer implements SavingsAccount
 		this.address = address;
 		this.phone = phone;
 		this.balance = balance;
+		this.homeBranch = homeBranch;
+
 		transactions  =  new ArrayList<String>(5);
 		addTransaction("Initial deposit - " + balance);
 	}
@@ -37,7 +48,7 @@ class Customer implements SavingsAccount
 	@Override
 	public void withdraw(double amount)
 	{
-		if(amount>(balance-200))
+		if(amount > (balance - 200))
 		{
 			System.out.println("Insufficient balance.");
 			return;
@@ -48,19 +59,35 @@ class Customer implements SavingsAccount
 
 	private void addTransaction(String message)
 	{
-			transactions.add(0,message);
-			if(transactions.size()>5)
+			transactions.add(0, message);
+			if(transactions.size() > 5)
 			{
 				transactions.remove(5);
 				transactions.trimToSize();
 			}
+	}
+
+	public static void displayMenu(){
+
+			System.out.println("\n-------------------");
+			System.out.println("Welcome to the bank.");
+			System.out.println("-------------------\n");
+			System.out.println("1. Register account.");
+			System.out.println("2. Login.");
+			System.out.println("3. Exit.");
+			System.out.print("\nEnter your choice : ");
+
 	}
 }
 
 
 class Bank
 {
+	
+	final static String outputFilePath = "banking_records.txt";
+
 	Map<String,Customer> customerMap;
+
 	Bank()
 	{
 		customerMap = new HashMap <String,Customer>();
@@ -76,19 +103,15 @@ class Bank
 		int choice;
 	outer:	while(true)
 		{
-			System.out.println("\n-------------------");
-			System.out.println("Welcome to the bank.");
-			System.out.println("-------------------\n");
-			System.out.println("1. Register account.");
-			System.out.println("2. Login.");
-			System.out.println("3. Exit.");
-			System.out.print("\nEnter your choice : ");
+
+			Customer.displayMenu();
 			choice = sc.nextInt();
 			sc.nextLine();
-			
+
 			switch(choice)
 			{
 				case 1:
+
 					System.out.print("Enter name : ");
 					String name = sc.nextLine();
 					System.out.print("Enter address : ");
@@ -96,27 +119,66 @@ class Bank
 					System.out.print("Enter contact number : ");
 					String phone = sc.nextLine();
 					System.out.println("Set username : ");
+					
 					username = sc.next();
 					while(bank.customerMap.containsKey(username))
 					{
 						System.out.println("Username already exists. Set again : ");
 						username = sc.next();
 					}
+					
 					System.out.println("Set a password :");
 					password = sc.next();
 					sc.nextLine();
+					
 					System.out.print("Enter initial deposit : ");
 					while(!sc.hasNextDouble())
 					{
 						System.out.println("Invalid amount. Enter again :");
 						sc.nextLine();
 					}
-					amount=sc.nextDouble();
-					customer = new Customer(username,password,name,address,phone,amount);
+					
+					amount = sc.nextDouble();
+					
+					BankLocation homeBranch = BankLocation.CHENNAI;
+					customer = new Customer(username, password, name, address, phone, amount, homeBranch);
 					bank.customerMap.put(username,customer);
+
+					File file = new File(outputFilePath);
+					BufferedWriter bf = null;
+
+					try{
+
+						bf = new BufferedWriter(new FileWriter(file));
+
+						for(Map.Entry<String, Customer> entry:  bank.customerMap.entrySet()){
+
+							bf.write(entry.getKey() + " : " + entry.getValue());
+							bf.newLine();
+
+						}
+
+						bf.flush();
+
+					} catch(IOException e){
+
+						e.printStackTrace();
+
+					} finally{
+
+						try{
+							bf.close();
+
+						}catch(Exception e){
+
+							e.printStackTrace();
+						}
+					}
+					
 					break;
 
 				case 2:
+
 					System.out.println("Enter username : ");
 					username = sc.next();
 					sc.nextLine();
@@ -152,7 +214,7 @@ class Bank
 									       }
 									       amount = sc.nextDouble();
 									       sc.nextLine();
-	                                                                       customer.deposit(amount);
+	                                       customer.deposit(amount);
 									       break;
 
 									case 2:
